@@ -44,7 +44,7 @@
 #include "boost/optional.hpp"
 
 #include <pcl/search/impl/search.hpp>
-#include "registration_t4.h"
+#include "registration_without_tree.h"
 #include "voxel_grid_covariance_omp.h"
 
 #include <unsupported/Eigen/NonLinearOptimization>
@@ -61,7 +61,7 @@ namespace pclomp
 	/** \brief A 3D Normal Distribution Transform registration implementation for point cloud data.
 	  * \note For more information please see
 	  * <b>Magnusson, M. (2009). The Three-Dimensional Normal-Distributions Transform —
-	  * an Efficient Representation for RegistrationT4, Surface Analysis, and Loop Detection.
+	  * an Efficient Representation for RegistrationWithoutTree, Surface Analysis, and Loop Detection.
 	  * PhD thesis, Orebro University. Orebro Studies in Technology 36.</b>,
 	  * <b>More, J., and Thuente, D. (1994). Line Search Algorithm with Guaranteed Sufficient Decrease
 	  * In ACM Transactions on Mathematical Software.</b> and
@@ -70,15 +70,15 @@ namespace pclomp
 	  * \author Brian Okorn (Space and Naval Warfare Systems Center Pacific)
 	  */
 	template<typename PointSource, typename PointTarget>
-	class NormalDistributionsTransform : public RegistrationT4<PointSource, PointTarget>
+	class NormalDistributionsTransform : public RegistrationWithoutTree<PointSource, PointTarget>
 	{
 	protected:
 
-		typedef typename RegistrationT4<PointSource, PointTarget>::PointCloudSource PointCloudSource;
+		typedef typename RegistrationWithoutTree<PointSource, PointTarget>::PointCloudSource PointCloudSource;
 		typedef typename PointCloudSource::Ptr PointCloudSourcePtr;
 		typedef typename PointCloudSource::ConstPtr PointCloudSourceConstPtr;
 
-		typedef typename RegistrationT4<PointSource, PointTarget>::PointCloudTarget PointCloudTarget;
+		typedef typename RegistrationWithoutTree<PointSource, PointTarget>::PointCloudTarget PointCloudTarget;
 		typedef typename PointCloudTarget::Ptr PointCloudTargetPtr;
 		typedef typename PointCloudTarget::ConstPtr PointCloudTargetConstPtr;
 
@@ -130,7 +130,7 @@ namespace pclomp
 		inline void
 			setInputTarget(const PointCloudTargetConstPtr &cloud)
 		{
-			RegistrationT4<PointSource, PointTarget>::setInputTarget(cloud);
+			RegistrationWithoutTree<PointSource, PointTarget>::setInputTarget(cloud);
 			init();
 		}
 
@@ -290,22 +290,22 @@ namespace pclomp
 
 	protected:
 
-		using RegistrationT4<PointSource, PointTarget>::reg_name_;
-		using RegistrationT4<PointSource, PointTarget>::getClassName;
-		using RegistrationT4<PointSource, PointTarget>::input_;
-		using RegistrationT4<PointSource, PointTarget>::indices_;
-		using RegistrationT4<PointSource, PointTarget>::target_;
-		using RegistrationT4<PointSource, PointTarget>::nr_iterations_;
-		using RegistrationT4<PointSource, PointTarget>::max_iterations_;
-		using RegistrationT4<PointSource, PointTarget>::previous_transformation_;
-		using RegistrationT4<PointSource, PointTarget>::final_transformation_;
-		using RegistrationT4<PointSource, PointTarget>::transformation_;
-		using RegistrationT4<PointSource, PointTarget>::transformation_epsilon_;
-		using RegistrationT4<PointSource, PointTarget>::converged_;
-		using RegistrationT4<PointSource, PointTarget>::corr_dist_threshold_;
-		using RegistrationT4<PointSource, PointTarget>::inlier_threshold_;
+		using RegistrationWithoutTree<PointSource, PointTarget>::reg_name_;
+		using RegistrationWithoutTree<PointSource, PointTarget>::getClassName;
+		using RegistrationWithoutTree<PointSource, PointTarget>::input_;
+		using RegistrationWithoutTree<PointSource, PointTarget>::indices_;
+		using RegistrationWithoutTree<PointSource, PointTarget>::target_;
+		using RegistrationWithoutTree<PointSource, PointTarget>::nr_iterations_;
+		using RegistrationWithoutTree<PointSource, PointTarget>::max_iterations_;
+		using RegistrationWithoutTree<PointSource, PointTarget>::previous_transformation_;
+		using RegistrationWithoutTree<PointSource, PointTarget>::final_transformation_;
+		using RegistrationWithoutTree<PointSource, PointTarget>::transformation_;
+		using RegistrationWithoutTree<PointSource, PointTarget>::transformation_epsilon_;
+		using RegistrationWithoutTree<PointSource, PointTarget>::converged_;
+		using RegistrationWithoutTree<PointSource, PointTarget>::corr_dist_threshold_;
+		using RegistrationWithoutTree<PointSource, PointTarget>::inlier_threshold_;
 
-		using RegistrationT4<PointSource, PointTarget>::update_visualizer_;
+		using RegistrationWithoutTree<PointSource, PointTarget>::update_visualizer_;
 
 		/** \brief Estimate the transformation and returns the transformed source (input) as output.
 		  * \param[out] output the resultant input transformed point cloud dataset

@@ -38,11 +38,9 @@
  *
  */
 
-#include "registration_t4.h"
-
 ///////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointSource, typename PointTarget, typename Scalar> inline void
-RegistrationT4<PointSource, PointTarget, Scalar>::setInputTarget (const PointCloudTargetConstPtr &cloud)
+RegistrationWithoutTree<PointSource, PointTarget, Scalar>::setInputTarget (const PointCloudTargetConstPtr &cloud)
 {
   if (cloud->points.empty ())
   {
@@ -55,11 +53,11 @@ RegistrationT4<PointSource, PointTarget, Scalar>::setInputTarget (const PointClo
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointSource, typename PointTarget, typename Scalar> bool
-RegistrationT4<PointSource, PointTarget, Scalar>::initCompute ()
+RegistrationWithoutTree<PointSource, PointTarget, Scalar>::initCompute ()
 {
   if (!target_)
   {
-    PCL_ERROR ("[RegistrationT4::%s::compute] No input target dataset was given!\n", getClassName ().c_str ());
+    PCL_ERROR ("[RegistrationWithoutTree::%s::compute] No input target dataset was given!\n", getClassName ().c_str ());
     return (false);
   }
 
@@ -85,11 +83,11 @@ RegistrationT4<PointSource, PointTarget, Scalar>::initCompute ()
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointSource, typename PointTarget, typename Scalar> bool
-RegistrationT4<PointSource, PointTarget, Scalar>::initComputeReciprocal ()
+RegistrationWithoutTree<PointSource, PointTarget, Scalar>::initComputeReciprocal ()
 {
   if (!input_)
   {
-    PCL_ERROR ("[RegistrationT4::%s::compute] No input source dataset was given!\n", getClassName ().c_str ());
+    PCL_ERROR ("[RegistrationWithoutTree::%s::compute] No input source dataset was given!\n", getClassName ().c_str ());
     return (false);
   }
 
@@ -103,7 +101,7 @@ RegistrationT4<PointSource, PointTarget, Scalar>::initComputeReciprocal ()
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointSource, typename PointTarget, typename Scalar> inline double
-RegistrationT4<PointSource, PointTarget, Scalar>::getFitnessScore (
+RegistrationWithoutTree<PointSource, PointTarget, Scalar>::getFitnessScore (
     const std::vector<float> &distances_a,
     const std::vector<float> &distances_b)
 {
@@ -115,7 +113,7 @@ RegistrationT4<PointSource, PointTarget, Scalar>::getFitnessScore (
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointSource, typename PointTarget, typename Scalar> inline double
-RegistrationT4<PointSource, PointTarget, Scalar>::getFitnessScore (double max_range)
+RegistrationWithoutTree<PointSource, PointTarget, Scalar>::getFitnessScore (double max_range)
 {
 
   double fitness_score = 0.0;
@@ -151,14 +149,14 @@ RegistrationT4<PointSource, PointTarget, Scalar>::getFitnessScore (double max_ra
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointSource, typename PointTarget, typename Scalar> inline void
-RegistrationT4<PointSource, PointTarget, Scalar>::align (PointCloudSource &output)
+RegistrationWithoutTree<PointSource, PointTarget, Scalar>::align (PointCloudSource &output)
 {
   align (output, Matrix4::Identity ());
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointSource, typename PointTarget, typename Scalar> inline void
-RegistrationT4<PointSource, PointTarget, Scalar>::align (PointCloudSource &output, const Matrix4& guess)
+RegistrationWithoutTree<PointSource, PointTarget, Scalar>::align (PointCloudSource &output, const Matrix4& guess)
 {
   if (!initCompute ()) 
     return;

@@ -1,52 +1,3 @@
-// // PCL includes
-// #include <pcl/pcl_base.h>
-// #include <pcl/common/transforms.h>
-// #include <pcl/pcl_macros.h>
-// #include <pcl/search/kdtree.h>
-// #include <pcl/registration/boost.h>
-// #include <pcl/registration/transformation_estimation.h>
-// #include <pcl/registration/correspondence_estimation.h>
-// #include <pcl/registration/correspondence_rejection.h>
-
-// template <typename PointSource, typename PointTarget, typename Scalar = float>
-//   class RegistrationT4 : public pcl::Registration<PointSource, PointTarget, Scalar> 
-// {
-// public:
-//   bool RegistrationT4<PointSource, PointTarget, Scalar>::initCompute () override;
-// };
-
-// template <typename PointSource, typename PointTarget, typename Scalar> bool
-// RegistrationT4<PointSource, PointTarget, Scalar>::initCompute ()
-// {
-//   if (!target_)
-//   {
-//     PCL_ERROR ("[RegistrationT4::%s::compute] No input target dataset was given!\n", getClassName ().c_str ());
-//     return (false);
-//   }
-
-//   // Only update target kd-tree if a new target cloud was set
-//   if (target_cloud_updated_ && !force_no_recompute_)
-//   {
-//     // tree_->setInputCloud (target_);
-//     PCL_ERROR ("ndt_scan_matcher called! Good job!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-//     target_cloud_updated_ = false;
-//   } else {
-//     PCL_ERROR ("ndt_scan_matcher not called................................\n");
-//   }
-  
-//   // Update the correspondence estimation
-//   if (correspondence_estimation_)
-//   {
-//     correspondence_estimation_->setSearchMethodTarget (tree_, force_no_recompute_);
-//     correspondence_estimation_->setSearchMethodSource (tree_reciprocal_, force_no_recompute_reciprocal_);
-//   }
-  
-//   // Note: we /cannot/ update the search method on all correspondence rejectors, because we know 
-//   // nothing about them. If they should be cached, they must be cached individually.
-
-//   return (pcl::PCLBase<PointSource>::initCompute ());
-// }
-
 /*
  * Software License Agreement (BSD License)
  *
@@ -101,12 +52,12 @@
 
 // namespace pclomp
 // {
-  /** \brief @b RegistrationT4 represents the base registration class for general purpose, ICP-like methods.
+  /** \brief @b RegistrationWithoutTree represents the base registration class for general purpose, ICP-like methods.
     * \author Radu B. Rusu, Michael Dixon
     * \ingroup registration
     */
   template <typename PointSource, typename PointTarget, typename Scalar = float>
-  class RegistrationT4 : public pcl::PCLBase<PointSource>
+  class RegistrationWithoutTree : public pcl::PCLBase<PointSource>
   {
     public:
       using Matrix4 = Eigen::Matrix<Scalar, 4, 4>;
@@ -116,8 +67,8 @@
       using pcl::PCLBase<PointSource>::input_;
       using pcl::PCLBase<PointSource>::indices_;
 
-      using Ptr = pcl::shared_ptr< RegistrationT4<PointSource, PointTarget, Scalar> >;
-      using ConstPtr = pcl::shared_ptr< const RegistrationT4<PointSource, PointTarget, Scalar> >;
+      using Ptr = pcl::shared_ptr< RegistrationWithoutTree<PointSource, PointTarget, Scalar> >;
+      using ConstPtr = pcl::shared_ptr< const RegistrationWithoutTree<PointSource, PointTarget, Scalar> >;
 
       using CorrespondenceRejectorPtr = pcl::registration::CorrespondenceRejector::Ptr;
       using KdTree = pcl::search::KdTree<PointTarget>;
@@ -157,7 +108,7 @@
                                                       const std::vector<int>&);
 
       /** \brief Empty constructor. */
-      RegistrationT4 () 
+      RegistrationWithoutTree () 
         : tree_ (new KdTree)
         , tree_reciprocal_ (new KdTreeReciprocal)
         , nr_iterations_ (0)
@@ -186,7 +137,7 @@
       }
 
       /** \brief destructor. */
-      ~RegistrationT4 () {}
+      ~RegistrationWithoutTree () {}
 
       /** \brief Provide a pointer to the transformation estimation object.
         * (e.g., SVD, point to plane etc.) 
@@ -662,4 +613,4 @@
    };
 // }
 
-#include <pclomp/registration_t4_impl.hpp>
+#include <pclomp/registration_without_tree_impl.hpp>

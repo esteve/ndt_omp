@@ -39,8 +39,7 @@
 
 // #include <pcl/registration/icp.h>
 // #include <pcl/registration/icp_nl.h>
-#include <pclomp/registration_t4.h>
-// #include <pclomp/registration_t4_impl.hpp>
+#include <pclomp/registration_without_tree.h>
 #include <pcl/point_types.h>
 /*#include <pcl/registration/correspondence_estimation.h>
 #include <pcl/registration/correspondence_rejection.h>
