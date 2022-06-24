@@ -231,7 +231,7 @@ pclomp::GeneralizedIterativeClosestPoint<PointSource, PointTarget>::estimateRigi
   } while(result == BFGSSpace::Running && inner_iterations_ < max_inner_iterations_);
   if(result == BFGSSpace::NoProgress || result == BFGSSpace::Success || inner_iterations_ == max_inner_iterations_)
   {
-    PCL_DEBUG ("[pcl::registration::TransformationEstimationBFGS::estimateRigidTransformation]");
+    PCL_DEBUG ("[Registration::TransformationEstimationBFGS::estimateRigidTransformation]");
     PCL_DEBUG ("BFGS solver finished with exit code %i \n", result);
     transformation_matrix.setIdentity();
     applyState(transformation_matrix, x);

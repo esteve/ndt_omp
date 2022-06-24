@@ -62,6 +62,7 @@ add_library(ndt_omp
   src/pclomp/voxel_grid_covariance_omp.cpp
   src/pclomp/ndt_omp.cpp
   src/pclomp/gicp_omp.cpp
+  src/pclomp/registration_t4.cpp
 )
 
 add_executable(align
@@ -115,6 +116,7 @@ ament_auto_add_library(ndt_omp SHARED
   src/pclomp/voxel_grid_covariance_omp.cpp
   src/pclomp/ndt_omp.cpp
   src/pclomp/gicp_omp.cpp
+  src/pclomp/registration_t4.cpp
 )
 
 target_link_libraries(ndt_omp ${PCL_LIBRARIES})

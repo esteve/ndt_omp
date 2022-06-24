@@ -167,6 +167,7 @@ namespace pclomp
           return (nr_points);
         }
 
+
         /** \brief Number of points contained by voxel */
         int nr_points;
 
