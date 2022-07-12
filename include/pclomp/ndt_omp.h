@@ -132,6 +132,7 @@ namespace pclomp
 		{
 			pcl::Registration<PointSource, PointTarget>::setInputTarget(cloud);
 			init();
+			target_cells_.getKOJICompressedCloud();
 		}
 
 		/** \brief Set/change the voxel grid resolution.
@@ -287,6 +288,11 @@ namespace pclomp
 		{
 			regularization_pose_ = boost::none;
 		}
+
+		// inline void kojiWriteUnscentedTransformedPCD()
+		// {
+		// 	target_cells_
+		// }
 
 	protected:
 

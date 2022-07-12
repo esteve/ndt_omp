@@ -45,6 +45,7 @@
 #include <unordered_map>
 #include <pcl/point_types.h>
 #include <pcl/kdtree/kdtree_flann.h>
+#include <pcl/io/pcd_io.h>
 
 namespace pclomp
 {
@@ -523,6 +524,12 @@ namespace pclomp
           return (0);
         return (radiusSearch (cloud.points[index], radius, k_leaves, k_sqr_distances, max_nn));
       }
+
+      /** \brief Get a cloud to visualize each voxels normal distribution.
+       * \param[out] cell_cloud a cloud created by sampling the normal distributions of each voxel
+       */
+      void
+      getKOJICompressedCloud();
 
     protected:
 

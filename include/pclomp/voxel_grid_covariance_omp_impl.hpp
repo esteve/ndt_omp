@@ -482,6 +482,39 @@ pclomp::VoxelGridCovariance<PointT>::getDisplayCloud (pcl::PointCloud<pcl::Point
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////
+template<typename PointT> void
+pclomp::VoxelGridCovariance<PointT>::getKOJICompressedCloud()
+{
+  pcl::PointCloud<pcl::PointXYZ> compressed_cloud;
+  compressed_cloud.clear ();
+
+  Eigen::Vector3d cell_mean;
+  Eigen::Vector3d dist_point;
+
+  // Generate points for each occupied voxel with sufficient points.
+  for (auto it = leaves_.begin (); it != leaves_.end (); ++it)
+  {
+    Leaf& leaf = it->second;
+
+    if (leaf.nr_points >= min_points_per_voxel_)
+    {
+      cell_mean = leaf.mean_;
+      Eigen::EigenSolver<Eigen::Matrix3d> eigensolver(leaf.cov_);
+
+      for (int xyz = 0; xyz < 3; ++xyz) {
+        dist_point = cell_mean + std::sqrt(3) * std::sqrt(eigensolver.eigenvalues().real()(xyz)) * eigensolver.eigenvectors().real().col(xyz);
+        compressed_cloud.push_back (pcl::PointXYZ (static_cast<float> (dist_point (0)), static_cast<float> (dist_point (1)), static_cast<float> (dist_point (2))));
+
+        dist_point = cell_mean - std::sqrt(3) * std::sqrt(eigensolver.eigenvalues().real()(xyz)) * eigensolver.eigenvectors().real().col(xyz);
+        compressed_cloud.push_back (pcl::PointXYZ (static_cast<float> (dist_point (0)), static_cast<float> (dist_point (1)), static_cast<float> (dist_point (2))));
+      }
+    }
+  }
+  pcl::PCDWriter writer;
+  writer.write<pcl::PointXYZ>("/root/koji_compressed.pcd", compressed_cloud, true);
+}
+
 #define PCL_INSTANTIATE_VoxelGridCovariance(T) template class PCL_EXPORTS pcl::VoxelGridCovariance<T>;
 
 #endif    // PCL_VOXEL_GRID_COVARIANCE_IMPL_H_
