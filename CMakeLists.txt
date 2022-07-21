@@ -63,6 +63,8 @@ add_library(ndt_omp
   src/pclomp/ndt_omp.cpp
   src/pclomp/gicp_omp.cpp
   src/pclomp/registration_without_tree.cpp
+  src/pclomp/ndt_omp_multi_voxel.cpp
+  src/pclomp/multi_voxel_grid_covariance_omp.cpp
 )
 
 add_executable(align
@@ -117,6 +119,8 @@ ament_auto_add_library(ndt_omp SHARED
   src/pclomp/ndt_omp.cpp
   src/pclomp/gicp_omp.cpp
   src/pclomp/registration_without_tree.cpp
+  src/pclomp/ndt_omp_multi_voxel.cpp
+  src/pclomp/multi_voxel_grid_covariance_omp.cpp
 )
 
 target_link_libraries(ndt_omp ${PCL_LIBRARIES})
