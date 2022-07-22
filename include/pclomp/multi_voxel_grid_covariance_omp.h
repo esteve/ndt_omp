@@ -45,7 +45,8 @@
 #include <unordered_map>
 #include <pcl/point_types.h>
 #include <pcl/kdtree/kdtree_flann.h>
-
+#include <Eigen/Dense>
+#include <Eigen/Cholesky>
 namespace pclomp
 {
 
@@ -68,7 +69,7 @@ namespace pclomp
       using pcl::VoxelGrid<PointT>::filter_limit_min_;
       using pcl::VoxelGrid<PointT>::filter_limit_max_;
 
-      using pcl::VoxelGrid<PointT>::downsample_all_data_;
+      // using pcl::VoxelGrid<PointT>::downsample_all_data_;
       using pcl::VoxelGrid<PointT>::leaf_size_;
       using pcl::VoxelGrid<PointT>::min_b_;
       using pcl::VoxelGrid<PointT>::max_b_;
@@ -241,7 +242,7 @@ namespace pclomp
         voxel_centroids_leaf_indices_ (),
         kdtree_ ()
       {
-        downsample_all_data_ = false;
+        // downsample_all_data_ = false;
         // save_leaf_layout_ = false;
         leaf_size_.setZero ();
         min_b_.setZero ();
@@ -275,18 +276,19 @@ namespace pclomp
 
         for (const auto & kv: input)
         {
-          std::vector<LeafID> new_leaf_indices;
-          // new_leaf_indices.reserve(kv.second.leaf_indices.size());
-          for (int i=0; i<int(kv.second.leaf_indices.size()); ++i) {
-            LeafID leaf_id = kv.second.leaf_indices[i];
-            leaf_id.leaf_id += int(output.voxel_centroids.size());
-            new_leaf_indices.push_back(leaf_id);
-          }
+          // std::vector<LeafID> new_leaf_indices;
+          // // new_leaf_indices.reserve(kv.second.leaf_indices.size());
+          // for (int i=0; i<int(kv.second.leaf_indices.size()); ++i) {
+          //   LeafID leaf_id = kv.second.leaf_indices[i];
+          //   leaf_id.leaf_id += int(output.voxel_centroids.size());
+          //   new_leaf_indices.push_back(leaf_id);
+          // }
 
           output.voxel_centroids += kv.second.voxel_centroids;
           // output.leaves.merge(kv.second.leaves);
           output.leaves.insert(kv.second.leaves.begin(), kv.second.leaves.end());
-          output.leaf_indices.insert(output.leaf_indices.end(), new_leaf_indices.begin(), new_leaf_indices.end());
+          // output.leaf_indices.insert(output.leaf_indices.end(), new_leaf_indices.begin(), new_leaf_indices.end());
+          output.leaf_indices.insert(output.leaf_indices.end(), kv.second.leaf_indices.begin(), kv.second.leaf_indices.end());
         }
       }
 
@@ -327,8 +329,6 @@ namespace pclomp
         // Check if kdtree has been built
         if (!searchable_)
         {
-          std::cout << "KOJI THIS SHOULD NOT APPEAR ON LOG" << std::endl;
-
           PCL_WARN ("%s: Not Searchable", this->getClassName ().c_str ());
           return 0;
         }
@@ -378,7 +378,17 @@ namespace pclomp
       /** \brief Filter cloud and initializes voxel structure.
        * \param[out] output cloud containing centroids of voxels containing a sufficient number of points
        */
-      void applyFilter (PointCloudPtr const &input, std::string cloud_id, VoxelGridInfo &voxel_grid_info);
+      void applyFilter (const PointCloudPtr &input, const std::string & cloud_id, VoxelGridInfo &voxel_grid_info);
+
+      void updateVoxelCentroids (const Leaf & leaf, PointCloud & voxel_centroids);
+
+      void updateLeaf (const PointT & point, const int & centroid_size, Leaf & leaf);
+
+      void computeLeafParams (const Eigen::Vector3d & pt_sum,
+        Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> & eigensolver,
+        Leaf & leaf);
+
+      void getLeafID (const std::string & cloud_id, const PointT & point, LeafID & leaf_idx);
 
       /** \brief Flag to determine if voxel structure is searchable. */
       bool searchable_;
