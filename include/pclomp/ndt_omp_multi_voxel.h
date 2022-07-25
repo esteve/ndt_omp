@@ -305,6 +305,11 @@ namespace pclomp
 			regularization_pose_ = boost::none;
 		}
 
+		void getVoxelPCD(pcl::PointCloud<PointTarget> & output)
+		{
+			target_cells_.getVoxelPCD(output);
+		}
+
 	protected:
 
 		using RegistrationWithoutTree<PointSource, PointTarget>::reg_name_;

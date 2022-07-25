@@ -226,6 +226,11 @@ namespace pclomp
         PointCloud voxel_centroids;
         Map leaves;
         std::vector<LeafID> leaf_indices;
+        void clear(){
+          voxel_centroids.clear();
+          leaves.clear();
+          leaf_indices.clear();
+        }
       };
 
     public:
@@ -240,7 +245,8 @@ namespace pclomp
         leaves_ (),
         voxel_grid_info_dict_ (),
         voxel_centroids_leaf_indices_ (),
-        kdtree_ ()
+        kdtree_ (),
+        voxel_grid_info_all_ ()
       {
         // downsample_all_data_ = false;
         // save_leaf_layout_ = false;
@@ -267,12 +273,13 @@ namespace pclomp
       removeCloud (const std::string cloud_id)
       {
         voxel_grid_info_dict_.erase(cloud_id);
+        std::cout << "REMOVE CALLED AT MULTI_VOXEL_GRID_COVARIANCE" << std::endl;
       }
 
       inline static void // static?
       concatVoxelGridInfoDict(std::map<std::string, VoxelGridInfo> & input, VoxelGridInfo & output)
       {
-        std::cout << "KOJI concatVoxelCentroidsDict called, size = " << int(input.size()) << std::endl;
+        // std::cout << "KOJI concatVoxelCentroidsDict called, size = " << int(input.size()) << std::endl;
 
         for (const auto & kv: input)
         {
@@ -285,7 +292,6 @@ namespace pclomp
           // }
 
           output.voxel_centroids += kv.second.voxel_centroids;
-          // output.leaves.merge(kv.second.leaves);
           output.leaves.insert(kv.second.leaves.begin(), kv.second.leaves.end());
           // output.leaf_indices.insert(output.leaf_indices.end(), new_leaf_indices.begin(), new_leaf_indices.end());
           output.leaf_indices.insert(output.leaf_indices.end(), kv.second.leaf_indices.begin(), kv.second.leaf_indices.end());
@@ -295,19 +301,21 @@ namespace pclomp
       inline void 
       createKdtree ()
       {
-        VoxelGridInfo voxel_grid_info_concat;
-        concatVoxelGridInfoDict (voxel_grid_info_dict_, voxel_grid_info_concat);
+        // VoxelGridInfo voxel_grid_info_all_;
+        voxel_grid_info_all_.clear();
+        concatVoxelGridInfoDict (voxel_grid_info_dict_, voxel_grid_info_all_);
 
-        leaves_ = voxel_grid_info_concat.leaves;
-        voxel_centroids_leaf_indices_ = voxel_grid_info_concat.leaf_indices;
+        leaves_ = voxel_grid_info_all_.leaves;
+        voxel_centroids_leaf_indices_ = voxel_grid_info_all_.leaf_indices;
 
-        if (voxel_grid_info_concat.voxel_centroids.size() > 0)
+        if (voxel_grid_info_all_.voxel_centroids.size() > 0)
         {
-          std::cout << "KOJI createKdtree. num points = " << voxel_grid_info_concat.voxel_centroids.points.size() <<
-            ", num leaves = " << voxel_grid_info_concat.leaves.size() <<
-            ", num_leaves_index = " << voxel_grid_info_concat.leaf_indices.size() << std::endl;
+          // std::cout << "KOJI createKdtree. num points = " << voxel_grid_info_all_.voxel_centroids.points.size() <<
+          //   ", num leaves = " << voxel_grid_info_all_.leaves.size() <<
+          //   ", num_leaves_index = " << voxel_grid_info_all_.leaf_indices.size() <<
+          //   ", num Grids = " << voxel_grid_info_dict_.size() << std::endl;
           // Initiates kdtree of the centroids of voxels containing a sufficient number of points
-          kdtree_.setInputCloud (voxel_grid_info_concat.voxel_centroids.makeShared());
+          kdtree_.setInputCloud (voxel_grid_info_all_.voxel_centroids.makeShared());
         }
       }
 
@@ -373,6 +381,11 @@ namespace pclomp
         return (radiusSearch (cloud.points[index], radius, k_leaves, k_sqr_distances, max_nn));
       }
 
+      void getVoxelPCD (PointCloud & output)
+      {
+        output = voxel_grid_info_all_.voxel_centroids;
+      }
+
     protected:
 
       /** \brief Filter cloud and initializes voxel structure.
@@ -410,6 +423,8 @@ namespace pclomp
 
       /** \brief KdTree generated using \ref voxel_centroids_ (used for searching). */
       pcl::KdTreeFLANN<PointT> kdtree_;
+
+      VoxelGridInfo voxel_grid_info_all_;
   };
 }
 
