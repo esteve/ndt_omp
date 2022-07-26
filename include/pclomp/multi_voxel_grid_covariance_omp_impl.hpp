@@ -129,7 +129,6 @@ pclomp::MultiVoxelGridCovariance<PointT>::applyFilter (
 
   // Eigen values less than a threshold of max eigen value are inflated to a set fraction of the max eigen value.
   double min_covar_eigvalue;
-  // std::cout << "KOJI leaves size @ " << cloud_id << ": " << voxel_grid_info.leaves.size() << std::endl;
   for (auto it = voxel_grid_info.leaves.begin (); it != voxel_grid_info.leaves.end (); ++it)
   {
     // Normalize the centroid

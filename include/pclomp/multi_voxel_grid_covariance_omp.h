@@ -273,27 +273,15 @@ namespace pclomp
       removeCloud (const std::string cloud_id)
       {
         voxel_grid_info_dict_.erase(cloud_id);
-        std::cout << "REMOVE CALLED AT MULTI_VOXEL_GRID_COVARIANCE" << std::endl;
       }
 
       inline static void // static?
       concatVoxelGridInfoDict(std::map<std::string, VoxelGridInfo> & input, VoxelGridInfo & output)
       {
-        // std::cout << "KOJI concatVoxelCentroidsDict called, size = " << int(input.size()) << std::endl;
-
         for (const auto & kv: input)
         {
-          // std::vector<LeafID> new_leaf_indices;
-          // // new_leaf_indices.reserve(kv.second.leaf_indices.size());
-          // for (int i=0; i<int(kv.second.leaf_indices.size()); ++i) {
-          //   LeafID leaf_id = kv.second.leaf_indices[i];
-          //   leaf_id.leaf_id += int(output.voxel_centroids.size());
-          //   new_leaf_indices.push_back(leaf_id);
-          // }
-
           output.voxel_centroids += kv.second.voxel_centroids;
           output.leaves.insert(kv.second.leaves.begin(), kv.second.leaves.end());
-          // output.leaf_indices.insert(output.leaf_indices.end(), new_leaf_indices.begin(), new_leaf_indices.end());
           output.leaf_indices.insert(output.leaf_indices.end(), kv.second.leaf_indices.begin(), kv.second.leaf_indices.end());
         }
       }
@@ -344,8 +332,6 @@ namespace pclomp
         // Find neighbors within radius in the occupied voxel centroid cloud
         std::vector<int> k_indices;
         int k = kdtree_.radiusSearch (point, radius, k_indices, k_sqr_distances, max_nn);
-        // std::cout << "radius search point: " << point << std::endl;
-        // std::cout << "radius search: " << k << std::endl;
 
         // Find leaves corresponding to neighbors
         k_leaves.reserve (k);
@@ -384,6 +370,18 @@ namespace pclomp
       void getVoxelPCD (PointCloud & output)
       {
         output = voxel_grid_info_all_.voxel_centroids;
+      }
+
+      void getVoxelGridInfoDict (std::map<std::string, VoxelGridInfo> & output)
+      {
+        output = voxel_grid_info_dict_;
+      }
+
+      void copyFrom (MultiVoxelGridCovariance & input)
+      {
+        std::map<std::string, VoxelGridInfo> input_dict;
+        input.getVoxelGridInfoDict(input_dict);
+        voxel_grid_info_dict_ = input_dict;
       }
 
     protected:

@@ -310,6 +310,19 @@ namespace pclomp
 			target_cells_.getVoxelPCD(output);
 		}
 
+		void getTargetCells(TargetGrid & output) const
+		{
+			output = target_cells_;
+		}
+
+		void copyFrom(const NormalDistributionsTransformMultiVoxel & input)
+		{
+			TargetGrid input_target_cells;
+			input.getTargetCells(input_target_cells);
+			target_cells_.copyFrom(input_target_cells);
+		}
+
+
 	protected:
 
 		using RegistrationWithoutTree<PointSource, PointTarget>::reg_name_;

@@ -127,11 +127,8 @@ pclomp::NormalDistributionsTransformMultiVoxel<PointSource, PointTarget>::comput
 
   // Calculate derivatives of initial transform vector, subsequent derivative calculations are done in the step length determination.
   score = computeDerivatives (score_gradient, hessian, output, p);
-  // std::cout << "KOJI ndt_omp_multi_voxel_impl.hpp computeTransformation: Start optimization. input size = " << input_->points.size() << std::endl;
-  // std::cout << "KOJI SCORE : " << score << std::endl;
   while (!converged_)
   {
-    // std::cout << "KOJI Optimizing..." << std::endl;
     // Store previous transformation
     previous_transformation_ = transformation_;
 
@@ -153,7 +150,6 @@ pclomp::NormalDistributionsTransformMultiVoxel<PointSource, PointTarget>::comput
       }
 
       converged_ = delta_p_norm == delta_p_norm;
-      // std::cout << "KOJI Exit optimization at here 1, tp = " << trans_probability_ << ", delta_p_norm = " << delta_p_norm << std::endl;
       return;
     }
 
@@ -282,13 +278,7 @@ pclomp::NormalDistributionsTransformMultiVoxel<PointSource, PointTarget>::comput
 		// 	break;
 		// }
     target_cells_.radiusSearch(x_trans_pt, resolution_, neighborhood, distances);
-    // std::cout << "KOJI x_trans_pt :" << x_trans_pt << std::endl;
-    // std::cout << "KOJI resolution_ :" << resolution_ << std::endl;
-    // // std::cout << "KOJI neighborhood :" << neighborhood << std::endl;
-    // std::cout << "KOJI distances :";
-    // for (const auto & hoge : distances) std::cout << hoge << " ";
-    // std::cout << std::endl;
-    // break;
+
 		double sum_score_pt = 0;
     double nearest_voxel_score_pt = 0;
 		Eigen::Matrix<double, 6, 1> score_gradient_pt = Eigen::Matrix<double, 6, 1>::Zero();
