@@ -317,11 +317,16 @@ namespace pclomp
 
 		void copyFrom(const NormalDistributionsTransformMultiVoxel & input)
 		{
-			TargetGrid input_target_cells;
-			input.getTargetCells(input_target_cells);
-			target_cells_.copyFrom(input_target_cells);
+			input.getTargetCells(target_cells_);
+			// TargetGrid input_target_cells;
+			// input.getTargetCells(input_target_cells);
+			// target_cells_.copyFrom(input_target_cells);
 		}
 
+		std::vector<std::string> getCurrentMapIDs()
+		{
+			return target_cells_.getCurrentMapIDs();
+		}
 
 	protected:
 

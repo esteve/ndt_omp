@@ -384,6 +384,15 @@ namespace pclomp
         voxel_grid_info_dict_ = input_dict;
       }
 
+  		std::vector<std::string> getCurrentMapIDs()
+      {
+        std::vector<std::string> output{};
+        for (const auto & element: voxel_grid_info_dict_) {
+          output.push_back(element.first);
+        }
+        return output;
+      }
+
     protected:
 
       /** \brief Filter cloud and initializes voxel structure.
