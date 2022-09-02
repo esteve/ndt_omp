@@ -367,21 +367,13 @@ namespace pclomp
         return (radiusSearch (cloud.points[index], radius, k_leaves, k_sqr_distances, max_nn));
       }
 
-      void getVoxelPCD (PointCloud & output)
+      // void getVoxelPCD (PointCloud & output)
+      // {
+      //   output = voxel_grid_info_all_.voxel_centroids;
+      // }
+      PointCloud getVoxelPCD () const
       {
-        output = voxel_grid_info_all_.voxel_centroids;
-      }
-
-      void getVoxelGridInfoDict (std::map<std::string, VoxelGridInfo> & output)
-      {
-        output = voxel_grid_info_dict_;
-      }
-
-      void copyFrom (MultiVoxelGridCovariance & input)
-      {
-        std::map<std::string, VoxelGridInfo> input_dict;
-        input.getVoxelGridInfoDict(input_dict);
-        voxel_grid_info_dict_ = input_dict;
+        return voxel_grid_info_all_.voxel_centroids;
       }
 
   		std::vector<std::string> getCurrentMapIDs()

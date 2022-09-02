@@ -127,6 +127,8 @@ pclomp::NormalDistributionsTransformMultiVoxel<PointSource, PointTarget>::comput
 
   // Calculate derivatives of initial transform vector, subsequent derivative calculations are done in the step length determination.
   score = computeDerivatives (score_gradient, hessian, output, p);
+  // std::cout << "KOJI INSIDE NDT_OMP start! score = " << score << std::endl;
+
   while (!converged_)
   {
     // Store previous transformation
@@ -142,6 +144,8 @@ pclomp::NormalDistributionsTransformMultiVoxel<PointSource, PointTarget>::comput
 
     if (delta_p_norm == 0 || delta_p_norm != delta_p_norm)
     {
+      // std::cout << "KOJI INSIDE NDT_OMP RETURNING,,,, " << std::endl;
+
       if (input_->points.empty()) {
         trans_probability_ = 0.0f;
       }

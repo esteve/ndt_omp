@@ -305,22 +305,28 @@ namespace pclomp
 			regularization_pose_ = boost::none;
 		}
 
-		void getVoxelPCD(pcl::PointCloud<PointTarget> & output)
+		// void getVoxelPCD(pcl::PointCloud<PointTarget> & output)
+		// {
+		// 	target_cells_.getVoxelPCD(output);
+		// }
+		pcl::PointCloud<PointTarget> getVoxelPCD()
 		{
-			target_cells_.getVoxelPCD(output);
+			return target_cells_.getVoxelPCD();
 		}
 
-		void getTargetCells(TargetGrid & output) const
+		// void getTargetCells(TargetGrid & output) const
+		// {
+		// 	output = target_cells_;
+		// }
+		TargetGrid getTargetCells() const
 		{
-			output = target_cells_;
+			return target_cells_;
 		}
 
 		void copyFrom(const NormalDistributionsTransformMultiVoxel & input)
 		{
-			input.getTargetCells(target_cells_);
-			// TargetGrid input_target_cells;
-			// input.getTargetCells(input_target_cells);
-			// target_cells_.copyFrom(input_target_cells);
+			// (void)input;
+			target_cells_ = input.getTargetCells();
 		}
 
 		std::vector<std::string> getCurrentMapIDs()
