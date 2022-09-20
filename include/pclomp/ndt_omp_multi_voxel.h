@@ -74,6 +74,8 @@ namespace pclomp
 	{
 	protected:
 
+		typedef RegistrationWithoutTree<PointSource, PointTarget> super;
+
 		typedef typename RegistrationWithoutTree<PointSource, PointTarget>::PointCloudSource PointCloudSource;
 		typedef typename PointCloudSource::Ptr PointCloudSourcePtr;
 		typedef typename PointCloudSource::ConstPtr PointCloudSourceConstPtr;
@@ -110,6 +112,19 @@ namespace pclomp
 		  * Sets \ref outlier_ratio_ to 0.35, \ref step_size_ to 0.05 and \ref resolution_ to 1.0
 		  */
 		NormalDistributionsTransformMultiVoxel();
+
+		/** \brief Copy constructor.
+		  */
+		NormalDistributionsTransformMultiVoxel(const NormalDistributionsTransformMultiVoxel & obj)
+		{
+			NormalDistributionsTransformMultiVoxel();
+			target_cells_ = obj.getTargetCells();
+			setNumThreads(obj.getNumThreads());
+			setStepSize(obj.getStepSize());
+			setResolution(obj.getResolution());
+			super::setTransformationEpsilon(obj.getTransformationEpsilonConst());
+			super::setMaximumIterations(obj.getMaximumIterationsConst());
+		}
 
 		/** \brief Empty destructor */
 		virtual ~NormalDistributionsTransformMultiVoxel() {}
@@ -257,6 +272,24 @@ namespace pclomp
 			getFinalTransformationArray() const
 		{
 			return transformation_array_;
+		}
+
+		/** \brief Get the transformation epsilon.
+		  * \return transformation epsilon
+		  */
+		inline double
+			getTransformationEpsilonConst() const
+		{
+			return (transformation_epsilon_);
+		}
+
+		/** \brief Get the transformation epsilon.
+		  * \return transformation epsilon
+		  */
+		inline int
+			getMaximumIterationsConst() const
+		{
+			return (max_iterations_);
 		}
 
 		/** \brief Convert 6 element transformation vector to affine transformation.
