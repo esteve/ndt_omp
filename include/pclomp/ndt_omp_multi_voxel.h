@@ -120,6 +120,8 @@ namespace pclomp
 			std::cout << "VENDOR/NDT_OMP COPY CONSTRUCTOR!!!!!!" << std::endl;
 			NormalDistributionsTransformMultiVoxel();
 			copyFrom(obj);
+			// target_cells_ = obj.getTargetCells();
+			// std::cout << "AFTER = " << &target_cells_ << std::endl;
 			// setNumThreads(obj.getNumThreads());
 			// setStepSize(obj.getStepSize());
 			// setResolution(obj.getResolution());
@@ -364,6 +366,11 @@ namespace pclomp
 			std::cout << "BEFORE = " << &target_cells_ << std::endl;
 			target_cells_ = input.getTargetCells();
 			std::cout << "AFTER = " << &target_cells_ << std::endl;
+			setNumThreads(input.getNumThreads());
+			setStepSize(input.getStepSize());
+			setResolution(input.getResolution());
+			super::setTransformationEpsilon(input.getTransformationEpsilonConst());
+			super::setMaximumIterations(input.getMaximumIterationsConst());
 		}
 
 		std::vector<std::string> getCurrentMapIDs()
