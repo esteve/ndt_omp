@@ -113,22 +113,6 @@ namespace pclomp
 		  */
 		NormalDistributionsTransformMultiVoxel();
 
-		/** \brief Copy constructor.
-		  */
-		NormalDistributionsTransformMultiVoxel(const NormalDistributionsTransformMultiVoxel & obj)
-		{
-			std::cout << "VENDOR/NDT_OMP COPY CONSTRUCTOR!!!!!!" << std::endl;
-			NormalDistributionsTransformMultiVoxel();
-			copyFrom(obj);
-			// target_cells_ = obj.getTargetCells();
-			// std::cout << "AFTER = " << &target_cells_ << std::endl;
-			// setNumThreads(obj.getNumThreads());
-			// setStepSize(obj.getStepSize());
-			// setResolution(obj.getResolution());
-			// super::setTransformationEpsilon(obj.getTransformationEpsilonConst());
-			// super::setMaximumIterations(obj.getMaximumIterationsConst());
-		}
-
 		/** \brief Empty destructor */
 		virtual ~NormalDistributionsTransformMultiVoxel() {}
 
@@ -341,36 +325,9 @@ namespace pclomp
 			regularization_pose_ = boost::none;
 		}
 
-		// void getVoxelPCD(pcl::PointCloud<PointTarget> & output)
-		// {
-		// 	target_cells_.getVoxelPCD(output);
-		// }
 		pcl::PointCloud<PointTarget> getVoxelPCD()
 		{
 			return target_cells_.getVoxelPCD();
-		}
-
-		// void getTargetCells(TargetGrid & output) const
-		// {
-		// 	output = target_cells_;
-		// }
-		TargetGrid getTargetCells() const
-		{
-			std::cout << "getTargetCells address: " << &target_cells_ << std::endl;
-			return target_cells_;
-		}
-
-		void copyFrom(const NormalDistributionsTransformMultiVoxel & input)
-		{
-			// (void)input;
-			std::cout << "BEFORE = " << &target_cells_ << std::endl;
-			target_cells_ = input.getTargetCells();
-			std::cout << "AFTER = " << &target_cells_ << std::endl;
-			setNumThreads(input.getNumThreads());
-			setStepSize(input.getStepSize());
-			setResolution(input.getResolution());
-			super::setTransformationEpsilon(input.getTransformationEpsilonConst());
-			super::setMaximumIterations(input.getMaximumIterationsConst());
 		}
 
 		std::vector<std::string> getCurrentMapIDs()

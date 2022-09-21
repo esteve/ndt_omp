@@ -255,7 +255,7 @@ namespace pclomp
         max_b_.setZero ();
         filter_name_ = "MultiVoxelGridCovariance";
       }
-  
+
       /** \brief Initializes voxel structure.
        * \param[in] searchable flag if voxel structure is searchable, if true then kdtree is built
        */
