@@ -278,6 +278,11 @@ namespace pclomp
 			regularization_scale_factor_ = regularization_scale_factor;
 		}
 
+		inline float getRegularizationScaleFactor()
+		{
+			return regularization_scale_factor_;
+		}
+
 		inline void setRegularizationPose(Eigen::Matrix4f regularization_pose)
 		{
 			regularization_pose_ = regularization_pose;
