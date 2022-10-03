@@ -213,16 +213,6 @@ namespace pclomp
 			outlier_ratio_ = outlier_ratio;
 		}
 
-		// inline void setNeighborhoodSearchMethod(NeighborSearchMethod method) {
-		// 	search_method = method;
-		// }
-
-		// inline NeighborSearchMethod
-		// 	getNeighborhoodSearchMethod() const
-		// {
-		// 	return search_method;
-		// }
-
 		/** \brief Get the registration alignment probability.
 		  * \return transformation probability
 		  */
@@ -315,6 +305,11 @@ namespace pclomp
 			regularization_scale_factor_ = regularization_scale_factor;
 		}
 
+		inline float getRegularizationScaleFactor() const
+		{
+			return regularization_scale_factor_;
+		}
+
 		inline void setRegularizationPose(Eigen::Matrix4f regularization_pose)
 		{
 			regularization_pose_ = regularization_pose;
@@ -325,12 +320,12 @@ namespace pclomp
 			regularization_pose_ = boost::none;
 		}
 
-		pcl::PointCloud<PointTarget> getVoxelPCD()
+		pcl::PointCloud<PointTarget> getVoxelPCD() const
 		{
 			return target_cells_.getVoxelPCD();
 		}
 
-		std::vector<std::string> getCurrentMapIDs()
+		std::vector<std::string> getCurrentMapIDs() const
 		{
 			return target_cells_.getCurrentMapIDs();
 		}

@@ -219,8 +219,7 @@ namespace pclomp
       /** \brief Const pointer to MultiVoxelGridCovariance leaf structure */
       typedef const Leaf* LeafConstPtr;
 
-      // typedef std::map<size_t, Leaf> Map;
-      typedef std::map<LeafID, Leaf> Map; // TODo (koji minoda): is this should be size_t, not int?
+      typedef std::map<LeafID, Leaf> Map;
 
       struct VoxelGridInfo {
         PointCloud voxel_centroids;
@@ -275,34 +274,30 @@ namespace pclomp
         voxel_grid_info_dict_.erase(cloud_id);
       }
 
-      inline static void // static?
-      concatVoxelGridInfoDict(std::map<std::string, VoxelGridInfo> & input, VoxelGridInfo & output)
+      inline VoxelGridInfo
+      concatVoxelGridInfoDict(std::map<std::string, VoxelGridInfo> & input) const
       {
+        VoxelGridInfo output;
         for (const auto & kv: input)
         {
           output.voxel_centroids += kv.second.voxel_centroids;
           output.leaves.insert(kv.second.leaves.begin(), kv.second.leaves.end());
           output.leaf_indices.insert(output.leaf_indices.end(), kv.second.leaf_indices.begin(), kv.second.leaf_indices.end());
         }
+        return output;
       }
 
       inline void 
       createKdtree ()
       {
-        // VoxelGridInfo voxel_grid_info_all_;
         voxel_grid_info_all_.clear();
-        concatVoxelGridInfoDict (voxel_grid_info_dict_, voxel_grid_info_all_);
+        voxel_grid_info_all_ = concatVoxelGridInfoDict(voxel_grid_info_dict_);
 
         leaves_ = voxel_grid_info_all_.leaves;
         voxel_centroids_leaf_indices_ = voxel_grid_info_all_.leaf_indices;
 
         if (voxel_grid_info_all_.voxel_centroids.size() > 0)
         {
-          // std::cout << "KOJI createKdtree. num points = " << voxel_grid_info_all_.voxel_centroids.points.size() <<
-          //   ", num leaves = " << voxel_grid_info_all_.leaves.size() <<
-          //   ", num_leaves_index = " << voxel_grid_info_all_.leaf_indices.size() <<
-          //   ", num Grids = " << voxel_grid_info_dict_.size() << std::endl;
-          // Initiates kdtree of the centroids of voxels containing a sufficient number of points
           kdtree_.setInputCloud (voxel_grid_info_all_.voxel_centroids.makeShared());
         }
       }
@@ -367,16 +362,12 @@ namespace pclomp
         return (radiusSearch (cloud.points[index], radius, k_leaves, k_sqr_distances, max_nn));
       }
 
-      // void getVoxelPCD (PointCloud & output)
-      // {
-      //   output = voxel_grid_info_all_.voxel_centroids;
-      // }
       PointCloud getVoxelPCD () const
       {
         return voxel_grid_info_all_.voxel_centroids;
       }
 
-  		std::vector<std::string> getCurrentMapIDs()
+  		std::vector<std::string> getCurrentMapIDs() const
       {
         std::vector<std::string> output{};
         for (const auto & element: voxel_grid_info_dict_) {

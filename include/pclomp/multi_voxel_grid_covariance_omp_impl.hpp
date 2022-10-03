@@ -77,9 +77,6 @@ pclomp::MultiVoxelGridCovariance<PointT>::applyFilter (
     voxel_grid_info.voxel_centroids.clear();
     return;
   }
-  // std::cout << "KOJI x: " << min_p[0] << " to " << max_p[0] << std::endl;
-  // std::cout << "KOJI y: " << min_p[1] << " to " << max_p[1] << std::endl;
-  // std::cout << "KOJI z: " << min_p[2] << " to " << max_p[2] << std::endl;
 
   // Compute the minimum and maximum bounding box values
   min_b_[0] = static_cast<int> (floor (min_p[0] * inverse_leaf_size_[0]));
